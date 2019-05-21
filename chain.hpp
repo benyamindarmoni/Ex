@@ -1,7 +1,7 @@
 namespace itertools
 {
 template <class T, class E>
-class _chain
+class chain
 {
    
 private:
@@ -23,7 +23,7 @@ private:
         iterator(U iteratable_A, V iteratable_B) : _iterator_A(iteratable_A), _iterator_B(iteratable_B), iterateA(true) {}
 
         
-        bool operator!=(_chain::iterator<U,V> const &other) 
+        bool operator!=(chain::iterator<U,V> const &other) 
         {
             if (iterateA && !(_iterator_A != (other._iterator_A))) 
           
@@ -45,7 +45,7 @@ private:
                 return *_iterator_B;
         }
 
-        _chain::iterator<U,V> &operator++()
+        chain::iterator<U,V> &operator++()
         {
             if(iterateA)
                 ++_iterator_A;
@@ -57,20 +57,20 @@ private:
     };
 
 public:
-    _chain(T from, E to) : _iteratable_A(from), _iteratable_B(to) {} // constructor
+    chain(T from, E to) : _iteratable_A(from), _iteratable_B(to) {} // constructor
 
     auto begin() const{ 
-        return  _chain::iterator<decltype(_iteratable_A.begin()),decltype(_iteratable_B.begin())>(_iteratable_A.begin(), _iteratable_B.begin()); }  // iteratable object
+        return  chain::iterator<decltype(_iteratable_A.begin()),decltype(_iteratable_B.begin())>(_iteratable_A.begin(), _iteratable_B.begin()); }  // iteratable object
 
     auto end() const {
-        return _chain::iterator<decltype(_iteratable_A.end()),decltype(_iteratable_B.end())>(_iteratable_A.end(), _iteratable_B.end()); }  // iteratable object  
+        return chain::iterator<decltype(_iteratable_A.end()),decltype(_iteratable_B.end())>(_iteratable_A.end(), _iteratable_B.end()); }  // iteratable object  
 };  // class
 
 template <typename T, typename E>
 
-_chain<T, E> chain(T first, E second)
+chain<T, E> chain(T first, E second)
 {
-    return _chain<T, E>(first, second);
+    return chain<T, E>(first, second);
 }
 
 }
