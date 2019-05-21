@@ -19,7 +19,7 @@ std::ostream &operator<<(std::ostream &os, const std::pair<T,E>&p)
 
 template <class T, class E>
 
-class _zip
+class zip
 {
 private:
     T _iteratable_A;    
@@ -38,7 +38,7 @@ private:
         iterator(U iteratable_A, V iteratable_B) : _iterator_A(iteratable_A), _iterator_B(iteratable_B) {}
 
         // operators
-        bool operator!=(_zip::iterator<U,V> const &other) 
+        bool operator!=(zip::iterator<U,V> const &other) 
         {
             return (_iterator_A != other._iterator_A) && (_iterator_B != other._iterator_B);
         }
@@ -49,7 +49,7 @@ private:
                               decltype(*_iterator_B)> (*_iterator_A,*_iterator_B);
         }
 
-        _zip::iterator<U,V> &operator++()
+        zip::iterator<U,V> &operator++()
         {
             ++_iterator_A;
             ++_iterator_B;
@@ -59,20 +59,20 @@ private:
     };
 
 public:
-    _zip(T from, E to) : _iteratable_A(from), _iteratable_B(to) {} // constructor
+    zip(T from, E to) : _iteratable_A(from), _iteratable_B(to) {} // constructor
 
     auto begin() const{ 
-        return  _zip::iterator<decltype(_iteratable_A.begin()),decltype(_iteratable_B.begin())>(_iteratable_A.begin(), _iteratable_B.begin()); }  // iteratable object
+        return  zip::iterator<decltype(_iteratable_A.begin()),decltype(_iteratable_B.begin())>(_iteratable_A.begin(), _iteratable_B.begin()); }  // iteratable object
 
     auto end() const {
-        return _zip::iterator<decltype(_iteratable_A.end()),decltype(_iteratable_B.end())>(_iteratable_A.end(), _iteratable_B.end()); }  // iteratable object  
+        return zip::iterator<decltype(_iteratable_A.end()),decltype(_iteratable_B.end())>(_iteratable_A.end(), _iteratable_B.end()); }  // iteratable object  
 };  
 
 template <typename T, typename E>
 
-_zip<T, E> zip(T first, E second)
+zip<T, E> zip(T first, E second)
 {
-    return _zip<T, E>(first, second);
+    return zip<T, E>(first, second);
 }
 
 } 
