@@ -107,11 +107,10 @@ public:
     auto end() const { return powerset::iterator<decltype(_from.begin())>(_from.end(), _from.end()); }      
 };                                                                                                                                                  // class
 
-template <typename T>
+/*template <typename T>
 
 powerset<T> powerset(T from)
 {
-    return _powerset<T>(from);
-}
 
-}
+
+} */
