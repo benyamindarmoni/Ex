@@ -30,7 +30,7 @@ private:
             _iterator_B_start_pos(iteratable_B) {}
 
         // operators
-        bool operator!=(_product::iterator<U,V> const &other) 
+        bool operator!=(product::iterator<U,V> const &other) 
         {            
             if ((_iterator_A != other._iterator_A) && !(_iterator_B != other._iterator_B))
             { 
@@ -64,11 +64,11 @@ public:
         return product::iterator<decltype(_iteratable_A.end()),decltype(_iteratable_B.end())>(_iteratable_A.end(), _iteratable_B.end()); }  // iteratable object  
 };  
 
-template <typename T, typename E>
+/*template <typename T, typename E>
 
 product<T, E> product(T first, E second)
 {
     return product<T, E>(first, second);
-}
+}*/
 
 }
