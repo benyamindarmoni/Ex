@@ -56,7 +56,7 @@ int main()
             .CHECK_OUTPUT(chain3.str(), "123456789")
             .CHECK_OUTPUT(chain4.str(), "1.51.52.5")
            
-            ;
+            ;/*
 
 
         std::ostringstream product1, product2, product3;
@@ -142,7 +142,7 @@ int main()
             .CHECK_OUTPUT(mixed_2.str(),"{} {1} {1} {1,1} ")
           
           
-            ;
+            ;*/
 
         grade = testcase.grade();
     }
