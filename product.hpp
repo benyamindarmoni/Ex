@@ -6,7 +6,7 @@ namespace itertools
 
 template <class T, class E>
 
-class _product
+class product
 {
    
 private:
@@ -47,7 +47,7 @@ private:
                               decltype(*_iterator_B)> (*_iterator_A,*_iterator_B);
         }
 
-        _product::iterator<U,V> &operator++()
+        product::iterator<U,V> &operator++()
         {
             ++_iterator_B;
             return *this;
@@ -55,20 +55,20 @@ private:
     };
 
 public:
-    _product(T from, E to) : _iteratable_A(from), _iteratable_B(to) {} // constructor
+    product(T from, E to) : _iteratable_A(from), _iteratable_B(to) {} // constructor
 
     auto begin() const{ 
-        return  _product::iterator<decltype(_iteratable_A.begin()),decltype(_iteratable_B.begin())>(_iteratable_A.begin(), _iteratable_B.begin()); }  // iteratable object
+        return  product::iterator<decltype(_iteratable_A.begin()),decltype(_iteratable_B.begin())>(_iteratable_A.begin(), _iteratable_B.begin()); }  // iteratable object
 
     auto end() const {
-        return _product::iterator<decltype(_iteratable_A.end()),decltype(_iteratable_B.end())>(_iteratable_A.end(), _iteratable_B.end()); }  // iteratable object  
+        return product::iterator<decltype(_iteratable_A.end()),decltype(_iteratable_B.end())>(_iteratable_A.end(), _iteratable_B.end()); }  // iteratable object  
 };  
 
 template <typename T, typename E>
 
-_product<T, E> product(T first, E second)
+product<T, E> product(T first, E second)
 {
-    return _product<T, E>(first, second);
+    return product<T, E>(first, second);
 }
 
 }
