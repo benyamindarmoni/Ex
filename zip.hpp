@@ -68,11 +68,11 @@ public:
         return zip::iterator<decltype(_iteratable_A.end()),decltype(_iteratable_B.end())>(_iteratable_A.end(), _iteratable_B.end()); }  // iteratable object  
 };  
 
-template <typename T, typename E>
+/*template <typename T, typename E>
 
 zip<T, E> zip(T first, E second)
 {
     return zip<T, E>(first, second);
-}
+}*/
 
 } 
