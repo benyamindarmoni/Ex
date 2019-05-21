@@ -32,7 +32,7 @@ std::ostream &operator<<(std::ostream &os, const std::vector<T> &S)
 
 template <class T>
 
-class _powerset
+class powerset
 {
 
 private:
@@ -68,7 +68,7 @@ private:
         }
 
         // operators
-        bool operator!=(_powerset::iterator<E> const &other) const
+        bool operator!=(powerset::iterator<E> const &other) const
         {
             return ((num_of_elements - index) != (other.num_of_elements - other.index - 1));
         }
@@ -93,7 +93,7 @@ private:
             return S;
         }
 
-        _powerset::iterator<E> &operator++()
+        powerset::iterator<E> &operator++()
         {
 
             ++index;
@@ -102,14 +102,14 @@ private:
     };
 
 public:
-    _powerset(T from) : _from(from) {}                                                                                                              // constructor
-    auto begin() const { return _powerset::iterator<decltype(_from.begin())>(_from.begin(), _from.end()); } 
-    auto end() const { return _powerset::iterator<decltype(_from.begin())>(_from.end(), _from.end()); }      
+    powerset(T from) : _from(from) {}                                                                                                              // constructor
+    auto begin() const { return powerset::iterator<decltype(_from.begin())>(_from.begin(), _from.end()); } 
+    auto end() const { return powerset::iterator<decltype(_from.begin())>(_from.end(), _from.end()); }      
 };                                                                                                                                                  // class
 
 template <typename T>
 
-_powerset<T> powerset(T from)
+powerset<T> powerset(T from)
 {
     return _powerset<T>(from);
 }
