@@ -66,11 +66,11 @@ public:
         return chain::iterator<decltype(_iteratable_A.end()),decltype(_iteratable_B.end())>(_iteratable_A.end(), _iteratable_B.end()); }  // iteratable object  
 };  // class
 
-template <typename T, typename E>
+/*template <typename T, typename E>
 
 chain<T, E> chain(T first, E second)
 {
     return chain<T, E>(first, second);
-}
+}*/
 
 }
