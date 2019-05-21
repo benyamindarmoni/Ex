@@ -4,7 +4,7 @@ namespace itertools
 
 template <class T>
 
-class _range
+class range
 {
 
 
@@ -23,7 +23,7 @@ private:
         iterator(T vall) : val(vall){}
 
         // operators
-        bool operator!=(_range::iterator const &other) const
+        bool operator!=(range::iterator const &other) const
         { 
             return val != (other.val);
         }
@@ -34,7 +34,7 @@ private:
         }
 
 
-        _range::iterator &operator++()
+        range::iterator &operator++()
         {
 
             ++val;
@@ -43,9 +43,9 @@ private:
     };
 
 public:
-    _range(T from, T to) : _from(from), _to(to) {}                     
-    _range::iterator begin() const { return _range::iterator(_from); } 
-    _range::iterator end() const { return _range::iterator(_to); }      
+    range(T from, T to) : _from(from), _to(to) {}                     
+    range::iterator begin() const { return range::iterator(_from); } 
+    range::iterator end() const { return range::iterator(_to); }      
 }; // class
 
 
