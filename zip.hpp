@@ -1,78 +1,102 @@
-
 #pragma once
-#include <utility> 
 #include <iostream>
-
 
 namespace itertools
 {
+    template <typename T1, typename T2>
 
-template <typename T,typename E>
-std::ostream &operator<<(std::ostream &os, const std::pair<T,E>&p)
-{
-    os << p.first << ',' << p.second;
-
-    return os;
-}
-
-
-
-template <class T, class E>
-
-class zip
-{
-private:
-    T _iteratable_A;    
-    E _iteratable_B;   
-
-    // Inner class (iterator)
-    template <typename U, typename V>
-    class iterator
+    /*
+    This class represents a parallel connection of two container-like (like zip)
+    */
+    class zip 
     {
-    public:
-        // variables
-        U _iterator_A; 
-        V _iterator_B; 
-
-        //constructor
-        iterator(U iteratable_A, V iteratable_B) : _iterator_A(iteratable_A), _iterator_B(iteratable_B) {}
-
-        // operators
-        bool operator!=(zip::iterator<U,V> const &other) 
+        private:
+        T1 _it1; //Container 1.
+        T2 _it2; //Container 2.
+        
+        public:
+        /*
+        A copy constructor.
+        */
+        zip(T1 _start, T2 _end) : _it1(_start), _it2(_end)
         {
-            return (_iterator_A != other._iterator_A) && (_iterator_B != other._iterator_B);
+
+        }
+        
+        template <typename P1, typename P2>
+
+        /*
+        This class represents an iterator.
+        */
+        class iterator
+        {
+          private:
+            P1 data1; //Pointer to the data of the first container.
+            P2 data2; //Pointer to the data of the second container.
+
+            public:
+            /*
+            A copy constructor.
+            */
+            iterator(P1 ptr1, P2 ptr2) : data1(ptr1), data2(ptr2)
+            {
+
+            }
+
+            /*
+            For operator *:
+            */
+            std::pair<decltype(*data1), decltype(*data2)> operator*() const
+            {
+                return  std::pair<decltype(*data1), decltype(*data2)> (*data1 , *data2);
+            }
+
+            /*
+            For operator ++:
+            */
+            iterator<P1, P2>& operator++()
+            {
+                ++data1; //Advance the first iterator.
+                ++data2; //Advance the second iterator.
+			    return *this;
+            }
+
+            /*
+            For operator !=:
+            */
+		    bool operator!=(iterator<P1,P2> it)
+            {
+			    return (data1 != it.data1); //Check if one of the iterators reached the end.
+            }
+        };
+
+        public:
+
+        /*
+        This function returns the start of the zip.
+        */
+        auto begin() const
+        {
+            return iterator <decltype(_it1.begin()), decltype(_it2.begin())> (_it1.begin(), _it2.begin());
         }
 
-        std::pair<decltype(*_iterator_A),decltype(*_iterator_B)> operator*() const
+        /*
+        This function returns the end of the zip.
+        */
+        auto end() const
         {
-            return std::pair< decltype(*_iterator_A),
-                              decltype(*_iterator_B)> (*_iterator_A,*_iterator_B);
-        }
-
-        zip::iterator<U,V> &operator++()
-        {
-            ++_iterator_A;
-            ++_iterator_B;
-            
-            return *this;
+            return iterator <decltype(_it1.end()), decltype(_it2.end())> (_it1.end(), _it2.end());
         }
     };
+    
+    template <typename T1,typename T2>
 
-public:
-    zip(T from, E to) : _iteratable_A(from), _iteratable_B(to) {} // constructor
-
-    auto begin() const{ 
-        return  zip::iterator<decltype(_iteratable_A.begin()),decltype(_iteratable_B.begin())>(_iteratable_A.begin(), _iteratable_B.begin()); }  // iteratable object
-
-    auto end() const {
-        return zip::iterator<decltype(_iteratable_A.end()),decltype(_iteratable_B.end())>(_iteratable_A.end(), _iteratable_B.end()); }  // iteratable object  
-};  
-
-/*template <typename T, typename E>
-
-zip<T, E> zip(T first, E second)
-{
-    return zip<T, E>(first, second);
-}*/
-
-} 
+    /*
+    For operator <<:
+    */
+    ostream &operator<<(ostream &os, const std::pair<T1,T2> &c) 
+    {
+        os << c.first << "," << c.second;
+        return os;
+    }
+}
