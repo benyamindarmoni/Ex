@@ -5,14 +5,11 @@ namespace itertools
 
     template <typename T>
     
-    /*
-    This class represents a range of objects.
-    */
     class range
     {
         protected:
-        T start; //The start of the range.
-        T end1; //The end of the range.
+        T start; 
+        T end1; 
 
         public:
         
