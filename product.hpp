@@ -1,74 +1,94 @@
-#include <utility> 
+#pragma once
 
 namespace itertools
 {
+    template <typename T1, typename T2>
 
-
-template <class T, class E>
-
-class product
-{
-   
-private:
-    T _iteratable_A;    
-    E _iteratable_B;    
-
-    template <typename U, typename V>
-    class iterator
+    /*
+    This class represents a cartesian product of two container-like.
+    */
+    class product 
     {
-    public:
-        // variables
-        U _iterator_A; 
-        V _iterator_B; 
+        private:
+        T1 _it1; //Container 1.
+        T2 _it2; //Container 2.
+        
+        public:
+        /*
+        A copy constructor.
+        */
+        product(T1 _start, T2 _end) : _it1(_start), _it2(_end)
+        {
 
-        V _iterator_B_start_pos;
+        }
+        
+        template <typename P1, typename P2>
+        
+        /*
+        This class represents an iterator.
+        */
+        class iterator
+        {
+            private:
+            P1 data1; //Pointer to the data of the first container.
+            P2 data2; //Pointer to the data of the second container.
+            P2 begin2; //Save the begin of the second iterator.
 
-        //constructor
-        iterator(U iteratable_A, V iteratable_B) : 
-            _iterator_A(iteratable_A), 
-            _iterator_B(iteratable_B),
-            _iterator_B_start_pos(iteratable_B) {}
+            public:
+            /*
+            A copy constructor.
+            */
+            iterator(P1 ptr1, P2 ptr2) : data1(ptr1), data2(ptr2), begin2(ptr2)
+            {
 
-        // operators
-        bool operator!=(product::iterator<U,V> const &other) 
-        {            
-            if ((_iterator_A != other._iterator_A) && !(_iterator_B != other._iterator_B))
-            { 
-                _iterator_B = _iterator_B_start_pos;
-                ++_iterator_A;
             }
 
-            return (_iterator_A != other._iterator_A);
+            /*
+            For operator *:
+            */
+            std::pair<decltype(*data1), decltype(*data2)> operator*() const
+            {
+                return  std::pair<decltype(*data1), decltype(*data2)> (*data1 , *data2);
+            }
+
+            /*
+            For operator ++:
+            */
+            iterator<P1, P2>& operator++()
+            {
+                ++data2; //Advance the second iterator.
+			    return *this;
+            }
+
+            /*
+            For operator !=:
+            */
+		    bool operator!=(iterator<P1,P2> it)
+            {
+                if (!(data2 != it.data2)) //Check if it's the end of the second word.
+                {
+                    ++data1; //Advance the first iterator.
+                    data2 = begin2; //Place the second iterator at the beginning of the second word.
+                }
+			    return ((data1 != it.data1) && (data2 != it.data2)); //Check if it's end of the first word.
+            }
+        };
+
+        public:
+        /*
+        This function returns the start of the product.
+        */
+        auto begin() const
+        {
+            return iterator <decltype(_it1.begin()), decltype(_it2.begin())> (_it1.begin(), _it2.begin());
         }
 
-        std::pair<decltype(*_iterator_A),decltype(*_iterator_B)> operator*() const
+        /*
+        This function returns the end of the product.
+        */
+        auto end() const
         {
-            return std::pair< decltype(*_iterator_A),
-                              decltype(*_iterator_B)> (*_iterator_A,*_iterator_B);
-        }
-
-        product::iterator<U,V> &operator++()
-        {
-            ++_iterator_B;
-            return *this;
+            return iterator <decltype(_it1.end()), decltype(_it2.end())> (_it1.end(), _it2.end());
         }
     };
-
-public:
-    product(T from, E to) : _iteratable_A(from), _iteratable_B(to) {} // constructor
-
-    auto begin() const{ 
-        return  product::iterator<decltype(_iteratable_A.begin()),decltype(_iteratable_B.begin())>(_iteratable_A.begin(), _iteratable_B.begin()); }  // iteratable object
-
-    auto end() const {
-        return product::iterator<decltype(_iteratable_A.end()),decltype(_iteratable_B.end())>(_iteratable_A.end(), _iteratable_B.end()); }  // iteratable object  
-};  
-
-/*template <typename T, typename E>
-
-product<T, E> product(T first, E second)
-{
-    return product<T, E>(first, second);
-}*/
-
 }
