@@ -1,116 +1,173 @@
-#include <set> 
-#include <vector>
+#pragma once
 #include <cmath>
 #include <iostream>
-#include "zip.hpp"
+#include <vector>
+using namespace std;
 
 namespace itertools
 {
+    template <typename T>
 
-template <typename T>
-std::ostream &operator<<(std::ostream &os, const std::vector<T> &S)
-{
-    os << "{";
-
-    auto it = S.begin();
-    if(it != S.end())
-{
-        os << *it; 
-        ++it;
-    }
-
-    while (it != S.end())
+    /*
+    This class represents all the subsets of a container-like.
+    */
+    class powerset
     {
-        os << ',' << *it;
-        ++it;
-    }
+        private:
+        T _start; //A container.
 
-    os << "}";
+        public:
+        /*
+        A copy constructor.
+        */
+        powerset(T _sta) : _start(_sta)
+        {
 
-    return os;
-}
-
-template <class T>
-
-class powerset
-{
-
-private:
-    T _from; 
-
-    template <class E>
-  
-    class iterator
-    {
-
-    public:
+        }
         
-
-        E _element_iterator_begin;
-        E _element_iterator_end;
-        unsigned int index;
-        unsigned int num_of_elements;
-
-        //constructor
-        iterator(E element_it_begin, E element_it_end) : _element_iterator_begin(element_it_begin),
-                                                         _element_iterator_end(element_it_end),
-                                                         index(0),
-                                                         num_of_elements(0)
+        template <typename P>
+        /*
+        This class represents an iterator.
+        */
+        class iterator
         {
-            E _element_iterator = _element_iterator_begin;
-            while (_element_iterator != _element_iterator_end)
+            private:
+            P data1; //Pointer to the start data of the container.
+            P data2; //Pointer to the end data of the container.
+            vector<vector<P>> value; 
+            unsigned size;
+            unsigned index;
+
+
+            public:
+            /*
+            A copy constructor.
+            */
+            iterator(P ptr1, P ptr2) : data1(ptr1), data2(ptr2), size(0), index(0)
             {
-                ++num_of_elements;
-                ++_element_iterator;
+                while (data1 != data2) //Counting how many elements. 
+                {
+                    size++;
+                    ++data1;
+                }
+                data1 = ptr1;
+
+                size = std::pow(2, size); //Calculating how many groups.
             }
 
-            num_of_elements = std::pow(2, num_of_elements);
-        }
+            /*
+            For operator *:
+            */
+           auto operator*()
+            {
+                vector<P> tempSet = swap(data1, data2);
+                value = help(tempSet);
 
-        // operators
-        bool operator!=(powerset::iterator<E> const &other) const
-        {
-            return ((num_of_elements - index) != (other.num_of_elements - other.index - 1));
-        }
+                vector<typename remove_const<typename remove_reference<decltype(*data2)>::type>::type> temp; 
 
-        auto operator*() const
-        {
-            E _element_iterator = _element_iterator_begin;
-            std::vector<typename std::remove_const<typename std::remove_reference<decltype(*_element_iterator_begin)>::type>::type> S;
-           
-            unsigned int i = index;
-            while (i != 0 && _element_iterator != _element_iterator_end)
-            { 
-                unsigned int r = i % 2;
-                i = i >> 1; 
+                for (auto i : value[index])
+                {
+                    temp.push_back(*i);
+                }
 
-                if (r == 1)
-                    S.emplace_back(*_element_iterator);
-
-                ++_element_iterator;
+                return temp;  
             }
 
-            return S;
+            /*
+            For operator ++:
+            */
+            auto operator++()
+            {
+                ++index;
+			    return *this;
+            }
+
+            /*
+            For operator !=:
+            */
+		    bool operator!=(iterator<P> it)
+            {
+			    return (index != size);
+            }
+
+            private:
+
+            vector<P> swap(P val1, P val2)
+            {
+                vector<P> temp;
+                P it = val1;
+
+                while (it != val2)
+                {
+                    temp.push_back(it);
+                    ++it;
+                }
+                
+                return temp;
+            }
+
+            vector<vector<P>> help(vector<P>& val)
+            {
+                vector<vector<P>> options;
+                vector<P> dataTemp;
+
+                options.push_back(dataTemp);
+
+                for (int i = 0; i < val.size(); i++)
+                {
+                    vector<vector<P>> temp = options;
+                    for (int j = 0; j < temp.size(); j++)
+                    {
+                        temp[j].push_back(val[i]);
+                    }
+
+                    for (int j = 0; j < temp.size(); j++)
+                    {
+                        options.push_back(temp[j]);
+                    }
+                }
+
+                return options;
+            }
+        };
+
+        public:
+        
+        /*
+        This function returns the start of the powerset.
+        */
+        auto begin() const
+        { 
+            return iterator<decltype(_start.begin())> (_start.begin(), _start.end());
         }
 
-        powerset::iterator<E> &operator++()
-        {
-
-            ++index;
-            return *this;
-        }
+        /*
+        This function returns the end of the powerset.
+        */
+        auto end() const
+        { 
+            return iterator<decltype(_start.begin())>(_start.end(), _start.end());
+        } 
     };
 
-public:
-    powerset(T from) : _from(from) {}                                                                                                              // constructor
-    auto begin() const { return powerset::iterator<decltype(_from.begin())>(_from.begin(), _from.end()); } 
-    auto end() const { return powerset::iterator<decltype(_from.begin())>(_from.end(), _from.end()); }      
-};                                                                                                                                                  // class
+    template <typename T>
+    std::ostream& operator<<(std::ostream& os, vector<T>& data)
+    {
+        os << "{";
+        auto start = data.begin(); //Starting the iterator.
+        if (start != data.end()) //Insert the first data in os.
+        {
+            os << *start;
+            start++;
+        }
 
-/*template <typename T>
+        while (start != data.end()) //Insert all the rest of the data in os.
+        {
+            os << "," << *start;
+            start++;
+        }
 
-powerset<T> powerset(T from)
-{
-
-
-} */
+        os << "}";
+        return os;
+    }
+}
