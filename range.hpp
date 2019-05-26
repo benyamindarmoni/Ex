@@ -12,11 +12,11 @@ namespace itertools
     {
         protected:
         T start; //The start of the range.
-        T end; //The end of the range.
+        T end1; //The end of the range.
 
         public:
         
-        range(T first, T second) : start(first), end(second)
+        range(T first, T second) : start(first), end1(second)
         {
 
         }
@@ -66,7 +66,7 @@ namespace itertools
 	    }
 	    iterator end() const
         {
-		    return iterator(end);
+		    return iterator(end1);
         }
     };
 }
