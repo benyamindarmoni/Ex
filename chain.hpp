@@ -4,103 +4,77 @@ namespace itertools
 {
     template <typename T1, typename T2>
 
-    /*
-    This class represents A chain of two containers-like.
-    */
+    
     class chain 
     {
-        private:
-        T1 _it1; //Container 1.
-        T2 _it2; //Container 2.
+        protected:
+        T1 cont1; 
+        T2 cont2; 
         
         public:
-        /*
-        A copy constructor.
-        */
-        chain(T1 _start, T2 _end) : _it1(_start), _it2(_end)
-        {
-
+        chain(T1 start, T2 end) : cont1(start), cont2(end)
+	{
         }
-
         template <typename P1, typename P2>
-
-        /*
-        This class represents an iterator.
-        */
         class iterator
         {
           private:
-            P1 data1; //Pointer to the data of the first container.
-            P2 data2; //Pointer to the data of the second container.
-            bool whichIt; //Check if the iterator is in the first word or the second.
+            P1 ptr1; 
+            P2 ptr2; 
+            bool isfirst; 
 
             public:
-            /*
-            A copy constructor.
-            */
-            iterator(P1 ptr1, P2 ptr2) : data1(ptr1), data2(ptr2), whichIt(true)
+          
+            iterator(P1 ptr_a, P2 ptr_b) : ptr1(ptr_a), ptr2(ptr_b), isfirst(true)
             {
-
-            }
-
-            /*
-            For operator *:
-            */
-            decltype(*data1) operator*() const
+            } 
+            decltype(*ptr1) operator*() const
             {
-                if (whichIt) 
+                if (isfirst) 
                 {
-                    return *data1; //If the iterator is in the first word.
+                    return *ptr1; 
                 }
-			    return *data2; //If the iterator is in the second word.
+		    else
+			    return *ptr2; 
             }
 
-            /*
-            For operator ++:
-            */
             iterator<P1, P2>& operator++()
             {
-                if (whichIt) //If the iterator is in the first word.
+                if (isfirst)
                 {
-                    ++data1; //Advance the first iterator.
-                    return *this;
+                    ++ptr1; 
                 }
-                ++data2; //Advance the seccond iterator.
+		    else
+                ++ptr2;
                 return *this;
             }
 
-            /*
-            For operator !=:
-            */
+           
 		    bool operator!=(iterator<P1,P2> it)
             {
-                if (whichIt && !(data1 != it.data1)) //If the first iterator reached the end of the first word.
+                if (isfirst && !(ptr1 != it.ptr1)) 
                 {
-                    whichIt = false;
+                    isfirst = false;
                 }
-                if (whichIt)
+                if (isfirst)
                 {
-                    return (data1 != it.data1); //If the iterator is in the first word.
+                    return (ptr1 != it.ptr1); 
                 }
-                return (data2 != it.data2); //If the iterator is in the second word.
+                return (ptr2 != it.ptr2); 
             }
         };
 
         public:
-        /*
-        This function returns the start of the chain.
-        */
+        
         auto begin() const
         {
-            return iterator <decltype(_it1.begin()), decltype(_it2.begin())> (_it1.begin(), _it2.begin());
+            return iterator <decltype(cont1.begin()), decltype(cont2.begin())> (cont1.begin(),cont2.begin());
         }
 
-        /*
-        This function returns the end of the chain.
-        */
+        
         auto end() const
         {
-            return iterator <decltype(_it1.end()), decltype(_it2.end())> (_it1.end(), _it2.end());
+            return iterator <decltype(cont1.end()), decltype(cont2.end())> (cont1.end(), cont2.end());
         }
 
     };
