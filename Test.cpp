@@ -8,8 +8,6 @@
 #include "badkan.hpp"
 using namespace std;
 using namespace itertools;
-// TODO: implement tests using the badkan.hpp
-
 int main()
 {
     badkan::TestCase testcase;
@@ -56,10 +54,9 @@ int main()
             .CHECK_OUTPUT(chain3.str(), "123456789")
             .CHECK_OUTPUT(chain4.str(), "1.51.52.5")
            
-            ;/*
-
-
-        std::ostringstream product1, product2, product3;
+            ;
+//Test product
+        std::ostringstream product1, product2;
 
         for (auto p : product(range(2,5), range(1,4)))
             product1 << p <<" ";
@@ -67,20 +64,17 @@ int main()
         for (auto p : product(range(1.2, 3.2), range(3.2, 5.2)))
             product2 << p << " ";
 
-        for (auto p : product(range('a', 'c'), range(1.9, 3.9))
-            product3 << p << " ";
-
-      ;
-
+       
+      
         testcase.setname("Test product")
             .CHECK_OUTPUT(product1.str(), "2,1 3,2 4,3 ")
             .CHECK_OUTPUT(product2.str(), "1.2,3.2 2.2,4.2 ")
-            .CHECK_OUTPUT(product3.str(), "a,1.9 b,2.9 ")
+            
         ;
 
         std::ostringstream powerset1, powerset2, powerset3;
 
-    
+    //Test powerset
 
         for (auto s : powerset(range(1, 3)))
             powerset1 << s << " ";
@@ -88,61 +82,37 @@ int main()
             powerset2<<s<<" ";
         for(auto s : powerset(range('a','d')))
             powerset3<<s<<" ";    
-      
-
+    
         testcase.setname("Test powerset")
             .CHECK_OUTPUT(powerset1.str(), "{} {1} {2} {1,2} ")
             .CHECK_OUTPUT(powerset2.str(), "{} {1.3} {2.3} {1.3,2.3} ")
             .CHECK_OUTPUT(powerset3.str(), "{} {a} {b} {a,b} {c} {a,c} {b,c} {a,b,c} ")
-         
-
+         ;
+//Test zip
 
         std::ostringstream zip1, zip2, zip3;
         for (auto p : zip(range(1, 2), range(1, 2)))
-            intZip << p << " ";
-
-        for (auto p : zip(range(1.2, 2.2), range(2.2, 3.2)))
             zip1 << p << " ";
 
-        for (auto p : zip(range('a', 'c'), range('d', 'f')))
+        for (auto p : zip(range(1.2, 2.2), range(2.2, 3.2)))
             zip2 << p << " ";
 
-     
-
+        for (auto p : zip(range('a', 'c'), range('d', 'f')))
+            zip3 << p << " ";
         testcase.setname("Test zip")
             .CHECK_OUTPUT(zip1.str(), "1,1 ")
             .CHECK_OUTPUT(zip2.str(), "1.2,2.2 ")
             .CHECK_OUTPUT(zip3.str(), "a,d b,e ")
           ;
+//test mix
+        std::ostringstream mixed;
 
-
-        std::ostringstream mixed_0,mixed_1,mixed_2;
-
-
-        //COMBINATIONS : ZIP && PRODUCT
         for(auto s : product(zip(range(1,3),range(5,7)),zip(range(11,13),range(15,17)))) //(1,5 2,7) (11,15 13,16) 
-            mixed_0<<s<<" "; 
+            mixed<<s<<" ";
+        testcase.setname("mix")
+            .CHECK_OUTPUT(mixed.str(),"1,5,11,15 1,5,12,16 2,6,11,15 2,6,12,16 ")
 
-        //COMBINATIONS :  PRODUCT &&  CHAIN   
-        for(auto s : product(chain(range(3,4),range(8,9)),chain(range(11,12),range(15,16)))) //(3,8) (11,15)
-            mixed_1<<s<<" ";
-
-        //COMBINATIONS :  POWERSET && CHAIN   
-        for(auto s : powerset(chain(range(1,2),range(1,2)))) // (1,1)
-            mixed_2<<s<<" ";
-
-      
-       
-
-       
-
-        testcase.setname("mixed tests")
-            .CHECK_OUTPUT(mixed_0.str(),"1,5,11,15 1,5,12,16 2,6,11,15 2,6,12,16 ")
-            .CHECK_OUTPUT(mixed_1.str(),"3,11 3,15 8,11 8,15 ") 
-            .CHECK_OUTPUT(mixed_2.str(),"{} {1} {1} {1,1} ")
-          
-          
-            ;*/
+            ;
 
         grade = testcase.grade();
     }
