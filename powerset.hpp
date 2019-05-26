@@ -56,7 +56,7 @@ namespace itertools
                 return t;  
             }
 
-            operator ++:
+            
             
             auto operator++()
             {
