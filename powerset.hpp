@@ -29,7 +29,7 @@ namespace itertools
 
 
             public:
-            iterator(P p1, P p2) : ptr1(ptr1), ptr2(ptr2), size(0), index(0)
+            iterator(P p1, P p2) : ptr1(p1), ptr2(p2), size(0), index(0)
             {
                 while (ptr1 != ptr2) 
                 {
