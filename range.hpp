@@ -10,93 +10,63 @@ namespace itertools
     */
     class range
     {
-        private:
-        T _start; //The start of the range.
-        T _end; //The end of the range.
+        protected:
+        T start; //The start of the range.
+        T end; //The end of the range.
 
         public:
-        /*
-        A copy constructor.
-        */
-        range(T start, T end) : _start(start), _end(end)
+        
+        range(T first, T second) : start(first), end(second)
         {
 
         }
 
-        /*
-        A disconstructor.
-        */
-        ~range()
-        {
-
-        }
-
-        /*
-        This class represents an iterator.
-        */
         class iterator
         {
             private:
-            T dataPtr; //Pointer to the data.
+            T ptr; 
 
             public:
-            /*
-            A copy constructor.
-            */
-            iterator(T ptr) : dataPtr(ptr)
+           
+            iterator(T p) : ptr(p)
             {
 
             }
 
-            /*
-            For operator *:
-            */
+          
             T operator*() const
             {
-			    return dataPtr;
+			    return ptr;
             }
 
-            /*
-            For operator ++:
-            */
+           
             iterator& operator++()
             {
-                ++dataPtr;
+                ++ptr;
 			    return *this;
             }
 
-            /*
-            For operator ==:
-            */
-		    bool operator==(const iterator& rhs) const
+		    bool operator==(const iterator& other) const
             {
-			    return (dataPtr == rhs.dataPtr);
+			    return (ptr == other.ptr);
 		    }
 
-            /*
-            For operator !=:
-            */
-		    bool operator!=(const iterator& rhs)
+            
+		    bool operator!=(const iterator& other)
             {
-			    return (dataPtr != rhs.dataPtr);
+			    return (ptr != other.ptr);
             }
         };
 
         public:
-        /*
-        This function returns the start of the range.
-        */
+       
         iterator begin() const
         {
-		    return iterator(_start);
+		    return iterator(start);
 	    }
-
-        /*
-        This function returns the end of the range.
-        */
 	    iterator end() const
         {
-		    return iterator(_end);
+		    return iterator(end);
         }
     };
 }
