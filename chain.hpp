@@ -1,76 +1,107 @@
+#pragma once
+
 namespace itertools
 {
-template <class T, class E>
-class chain
-{
-   
-private:
-    T _iteratable_A;   
-    E _iteratable_B;   
+    template <typename T1, typename T2>
 
-   
-    template <typename U, typename V>
-    class iterator
+    /*
+    This class represents A chain of two containers-like.
+    */
+    class chain 
     {
-    public:
-       
-        U _iterator_A;
-        V _iterator_B; 
-
-        bool iterateA;
-
-   
-        iterator(U iteratable_A, V iteratable_B) : _iterator_A(iteratable_A), _iterator_B(iteratable_B), iterateA(true) {}
-
+        private:
+        T1 _it1; //Container 1.
+        T2 _it2; //Container 2.
         
-        bool operator!=(chain::iterator<U,V> const &other) 
+        public:
+        /*
+        A copy constructor.
+        */
+        chain(T1 _start, T2 _end) : _it1(_start), _it2(_end)
         {
-            if (iterateA && !(_iterator_A != (other._iterator_A))) 
-          
-                iterateA = false;
 
-            if(iterateA)
-                return (_iterator_A != (other._iterator_A));
-            else 
-                return (_iterator_B != (other._iterator_B));
-
-            
         }
 
-        decltype(*_iterator_A) operator*() const
+        template <typename P1, typename P2>
+
+        /*
+        This class represents an iterator.
+        */
+        class iterator
         {
-            if(iterateA)
-                return *_iterator_A;
-            else
-                return *_iterator_B;
+          private:
+            P1 data1; //Pointer to the data of the first container.
+            P2 data2; //Pointer to the data of the second container.
+            bool whichIt; //Check if the iterator is in the first word or the second.
+
+            public:
+            /*
+            A copy constructor.
+            */
+            iterator(P1 ptr1, P2 ptr2) : data1(ptr1), data2(ptr2), whichIt(true)
+            {
+
+            }
+
+            /*
+            For operator *:
+            */
+            decltype(*data1) operator*() const
+            {
+                if (whichIt) 
+                {
+                    return *data1; //If the iterator is in the first word.
+                }
+			    return *data2; //If the iterator is in the second word.
+            }
+
+            /*
+            For operator ++:
+            */
+            iterator<P1, P2>& operator++()
+            {
+                if (whichIt) //If the iterator is in the first word.
+                {
+                    ++data1; //Advance the first iterator.
+                    return *this;
+                }
+                ++data2; //Advance the seccond iterator.
+                return *this;
+            }
+
+            /*
+            For operator !=:
+            */
+		    bool operator!=(iterator<P1,P2> it)
+            {
+                if (whichIt && !(data1 != it.data1)) //If the first iterator reached the end of the first word.
+                {
+                    whichIt = false;
+                }
+                if (whichIt)
+                {
+                    return (data1 != it.data1); //If the iterator is in the first word.
+                }
+                return (data2 != it.data2); //If the iterator is in the second word.
+            }
+        };
+
+        public:
+        /*
+        This function returns the start of the chain.
+        */
+        auto begin() const
+        {
+            return iterator <decltype(_it1.begin()), decltype(_it2.begin())> (_it1.begin(), _it2.begin());
         }
 
-        chain::iterator<U,V> &operator++()
+        /*
+        This function returns the end of the chain.
+        */
+        auto end() const
         {
-            if(iterateA)
-                ++_iterator_A;
-            else 
-                ++_iterator_B;
-            
-            return *this;
+            return iterator <decltype(_it1.end()), decltype(_it2.end())> (_it1.end(), _it2.end());
         }
+
     };
-
-public:
-    chain(T from, E to) : _iteratable_A(from), _iteratable_B(to) {} // constructor
-
-    auto begin() const{ 
-        return  chain::iterator<decltype(_iteratable_A.begin()),decltype(_iteratable_B.begin())>(_iteratable_A.begin(), _iteratable_B.begin()); }  // iteratable object
-
-    auto end() const {
-        return chain::iterator<decltype(_iteratable_A.end()),decltype(_iteratable_B.end())>(_iteratable_A.end(), _iteratable_B.end()); }  // iteratable object  
-};  // class
-
-/*template <typename T, typename E>
-
-chain<T, E> chain(T first, E second)
-{
-    return chain<T, E>(first, second);
-}*/
-
 }
