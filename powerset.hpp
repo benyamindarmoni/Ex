@@ -3,67 +3,50 @@
 #include <iostream>
 #include <vector>
 using namespace std;
-
 namespace itertools
 {
     template <typename T>
-
-    /*
-    This class represents all the subsets of a container-like.
-    */
     class powerset
     {
         private:
-        T _start; //A container.
+        T cont; 
 
         public:
-        /*
-        A copy constructor.
-        */
-        powerset(T _sta) : _start(_sta)
+      
+        powerset(T x) : cont(x)
         {
-
         }
         
         template <typename P>
-        /*
-        This class represents an iterator.
-        */
         class iterator
         {
             private:
-            P data1; //Pointer to the start data of the container.
-            P data2; //Pointer to the end data of the container.
+            P ptr1;
+            P ptr2;
             vector<vector<P>> value; 
             unsigned size;
             unsigned index;
 
 
             public:
-            /*
-            A copy constructor.
-            */
-            iterator(P ptr1, P ptr2) : data1(ptr1), data2(ptr2), size(0), index(0)
+            iterator(P p1, P p2) : ptr1(ptr1), ptr2(ptr2), size(0), index(0)
             {
-                while (data1 != data2) //Counting how many elements. 
+                while (ptr1 != ptr2) 
                 {
                     size++;
-                    ++data1;
+                    ++ptr1;
                 }
-                data1 = ptr1;
+                ptr1 = p1;
 
-                size = std::pow(2, size); //Calculating how many groups.
+                size = std::pow(2, size);
             }
 
-            /*
-            For operator *:
-            */
            auto operator*()
             {
-                vector<P> tempSet = swap(data1, data2);
-                value = help(tempSet);
+                vector<P> temp = swap(ptr1, ptr2);
+                value = help(temp);
 
-                vector<typename remove_const<typename remove_reference<decltype(*data2)>::type>::type> temp; 
+                vector<typename remove_const<typename remove_reference<decltype(*ptr2)>::type>::type> temp; 
 
                 for (auto i : value[index])
                 {
@@ -73,18 +56,15 @@ namespace itertools
                 return temp;  
             }
 
-            /*
-            For operator ++:
-            */
+            operator ++:
+            
             auto operator++()
             {
                 ++index;
 			    return *this;
             }
 
-            /*
-            For operator !=:
-            */
+      
 		    bool operator!=(iterator<P> it)
             {
 			    return (index != size);
@@ -133,20 +113,13 @@ namespace itertools
 
         public:
         
-        /*
-        This function returns the start of the powerset.
-        */
         auto begin() const
         { 
-            return iterator<decltype(_start.begin())> (_start.begin(), _start.end());
+            return iterator<decltype(cont.begin())> (cont.begin(), cont.end());
         }
-
-        /*
-        This function returns the end of the powerset.
-        */
         auto end() const
         { 
-            return iterator<decltype(_start.begin())>(_start.end(), _start.end());
+            return iterator<decltype(cont.begin())>(cont.end(), cont.end());
         } 
     };
 
@@ -154,14 +127,14 @@ namespace itertools
     std::ostream& operator<<(std::ostream& os, vector<T>& data)
     {
         os << "{";
-        auto start = data.begin(); //Starting the iterator.
-        if (start != data.end()) //Insert the first data in os.
+        auto start = data.begin(); 
+        if (start != data.end())
         {
             os << *start;
             start++;
         }
 
-        while (start != data.end()) //Insert all the rest of the data in os.
+        while (start != data.end()) 
         {
             os << "," << *start;
             start++;
