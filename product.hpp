@@ -12,7 +12,7 @@ namespace itertools
         
         public:
   
-        product(T1 _start, T2 _end) : _it1(_start), _it2(_end)
+        product(T1 x, T2 y) : cont1(x), cont2(y)
         {
         }
         
