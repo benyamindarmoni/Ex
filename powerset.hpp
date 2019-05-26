@@ -46,14 +46,14 @@ namespace itertools
                 vector<P> temp = swap(ptr1, ptr2);
                 value = help(temp);
 
-                vector<typename remove_const<typename remove_reference<decltype(*ptr2)>::type>::type> temp; 
+                vector<typename remove_const<typename remove_reference<decltype(*ptr2)>::type>::type> t; 
 
                 for (auto i : value[index])
                 {
-                    temp.push_back(*i);
+                    t.push_back(*i);
                 }
 
-                return temp;  
+                return t;  
             }
 
             operator ++:
