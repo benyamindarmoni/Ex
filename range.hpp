@@ -1,60 +1,102 @@
+#pragma once
+
 namespace itertools
 {
 
-
-template <class T>
-
-class range
-{
-
-
-private:
-    T _from;
-    T _to;   
-
-    class iterator
+    template <typename T>
+    
+    /*
+    This class represents a range of objects.
+    */
+    class range
     {
+        private:
+        T _start; //The start of the range.
+        T _end; //The end of the range.
 
-    public:
-        // variables
-        T val;
-
-        //constructor
-        iterator(T vall) : val(vall){}
-
-        // operators
-        bool operator!=(range::iterator const &other) const
-        { 
-            return val != (other.val);
-        }
-
-        T operator*() const
-        {
-            return val;
-        }
-
-
-        range::iterator &operator++()
+        public:
+        /*
+        A copy constructor.
+        */
+        range(T start, T end) : _start(start), _end(end)
         {
 
-            ++val;
-            return *this;
+        }
+
+        /*
+        A disconstructor.
+        */
+        ~range()
+        {
+
+        }
+
+        /*
+        This class represents an iterator.
+        */
+        class iterator
+        {
+            private:
+            T dataPtr; //Pointer to the data.
+
+            public:
+            /*
+            A copy constructor.
+            */
+            iterator(T ptr) : dataPtr(ptr)
+            {
+
+            }
+
+            /*
+            For operator *:
+            */
+            T operator*() const
+            {
+			    return dataPtr;
+            }
+
+            /*
+            For operator ++:
+            */
+            iterator& operator++()
+            {
+                ++dataPtr;
+			    return *this;
+            }
+
+            /*
+            For operator ==:
+            */
+		    bool operator==(const iterator& rhs) const
+            {
+			    return (dataPtr == rhs.dataPtr);
+		    }
+
+            /*
+            For operator !=:
+            */
+		    bool operator!=(const iterator& rhs)
+            {
+			    return (dataPtr != rhs.dataPtr);
+            }
+        };
+
+        public:
+        /*
+        This function returns the start of the range.
+        */
+        iterator begin() const
+        {
+		    return iterator(_start);
+	    }
+
+        /*
+        This function returns the end of the range.
+        */
+	    iterator end() const
+        {
+		    return iterator(_end);
         }
     };
-
-public:
-    range(T from, T to) : _from(from), _to(to) {}                     
-    range::iterator begin() const { return range::iterator(_from); } 
-    range::iterator end() const { return range::iterator(_to); }      
-}; // class
-
-
-/*
-template <typename T>
-
-_range<T> range(T from, T to)
-{
-    return _range<T>(from, to);
-}*/
-
 }
